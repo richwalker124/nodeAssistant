@@ -1,4 +1,0 @@
-node_modules
-apikeys.json
-.DS_Store
-.env
