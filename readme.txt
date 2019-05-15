@@ -5,6 +5,6 @@ The spotify functionality will allow you to search for songs, artists, and event
 The Omdb will allow you to search for different movies and (hopefully) upcoming ones as well!
 
 
-Dependancies- Axios, Moment, dotenv, Node-Spotify-API
+Dependancies- Axios, Moment, dotenv, Node-Spotify-API, inquire
 
 API keys needed- OMDB, Spotify, Bands-in-Town
