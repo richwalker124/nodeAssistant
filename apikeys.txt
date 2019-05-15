@@ -1,4 +1,0 @@
-OMDB API - 3097923a
-
-Spotify - cf4b97d35ba7459386278c68b62ab342
-secret - b25ffdc003044293a5e2e87ad3576572
