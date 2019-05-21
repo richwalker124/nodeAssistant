@@ -53,11 +53,11 @@ var spotify = new sptfy({
 
 //OMDB API functionality (Pull up basic info unless there are other arguments.)**************************************
 
-omdb.get({
+///omdb.get({
     title:'Dodgeball'
-}).then(res => {
+//}).then(res => {
     //console.log('response.get : ' + JSON.stringify(res));
-}).catch(console.error);
+//}).catch(console.error);
 
 // omdb.get({title: 'Saw'}, true, function(err, movie) {
 //     if(err){
@@ -80,13 +80,13 @@ inquire.prompt([
     type : "list",
     name : "startProgram",
     message : "Welcome to nodeAssistant! What can I help you with?",
-    choices : ["Find a Song or Artist", "Look up a Movie or Show", "Tell a Joke"]}
+    choices : ["Find a Song or Artist", "Look up a Movie or Show", "Quit"]}
 ]).then(ans => {
     if(ans.startProgram === "Find a Song or Artist"){
-        console.log("1")
+        spotifySearch();
     }else if (ans.startProgram === "Look up a Movie or Show"){
         omdbSearch();
-    }else{console.log("No.")}
+    }else{console.log("Hope I was able to help!")}
 })
 }
 
@@ -111,7 +111,76 @@ function omdbSearch(){
             })
             console.log(`\n*******************************************\n${res.title}\nRelease Date: ${res.year}\nGenre: ${genres.splice(0).join(", ").trim()}
             \nCast: ${actors.splice(0).join(", ").trim()}\nCountry of Origin: ${res.country}\nPlot Summary: ${res.plot}`);
+
+            restartSearch();
         }).catch(console.error);
+    })
+    //lastUsed();
+}
+
+//Function for searching spotify
+function spotifySearch(){
+    lastUsed = spotifySearch;
+    inquire.prompt([
+        {
+            type : "list",
+            name: "mediaType",
+            message : "What kind of music do you want to search for?",
+            choices : ["Track", "Album", "Artist"]   
+        },
+        {
+            type : "input",
+            name: "mediaName",
+            message : "What is the name of the media?",
+        }
+
+    ]).then(ans => {
+        
+        spotify.search({ type:ans.mediaType.toLowerCase(), query: ans.mediaName, limit: 1})
+.then(function(resp){
+    //results = JSON.parse(resp)
+   
+    if(ans.mediaType === "Artist"){
+    var genres = resp.artists.items[0].genres.splice(0).join(", ").trim()
+    console.log(`\n${resp.artists.items[0].name}\n
+    Genres: ${genres}\n
+    Followers on Spotify: ${resp.artists.items[0].followers.total}
+    `)}
+    if(ans.mediaType === "Track"){
+        console.log("\nTrack Title: " + resp.tracks.items[0].name)
+        console.log("Artist: " + resp.tracks.items[0].artists[0].name)
+    }
+    if(ans.mediaType === "Album"){
+        console.log("\nAlbum Title: " + resp.albums.items[0].name)
+        console.log("Artist: " + resp.albums.items[0].artists[0].name)
+        console.log("Release Date: " + resp.albums.items[0].release_date)
+    }
+   // console.log(JSON.stringify(resp))
+    //console.log(resp.albums.items[0]);
+    //console.log(resp.albums.items[0]);
+    
+})
+.catch(function(err){
+    console.log(err);
+});
+    restartSearch();
+    })
+}
+
+function restartSearch(){
+    inquire.prompt([
+        {
+            type : "list",
+            name: "ans",
+            message : "Would you like to search again?",
+            choices : ["Yes.", "No."]
+        }
+    ]).then(resp => {
+        if (resp.ans === "Yes."){
+            lastUsed();
+        }else{
+            start();
+        }
     })
 }
 start()
