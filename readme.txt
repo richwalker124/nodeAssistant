@@ -7,4 +7,4 @@ The Omdb will allow you to search for different movies and (hopefully) upcoming 
 
 Dependancies- Axios, Moment, dotenv, Node-Spotify-API, inquire
 
-API keys needed- OMDB, Spotify, Bands-in-Town
+API keys needed- OMDB and Spotify
